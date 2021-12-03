@@ -1,4 +1,5 @@
 import { data } from "../../utils/data"
+import { useMemo } from 'react'
 
 // export paths
 export const getStaticPaths = async() => {
@@ -17,21 +18,25 @@ export const getStaticPaths = async() => {
 export const getStaticProps = async (context) => {
   const id = context.params.id
   return {
-    props: { id: id },
+    props: { id },
    }
 }
 
+const getDetail = (n) => {
+  const found = data.find(item => item.id == n)
+  return found
+}
+
 function TitleDetail ({ id }) {
-  const oneDetail = data.find((item) => {
-    if (item.id == id)
-    return item
-  })
+  //useMemo
+  const detail = useMemo(() => getDetail(id), [id])
+
   return (
   <div>
     <h1>Title Details</h1>
-    <p>Title- {oneDetail.title}</p>
-    <p>Type- {oneDetail.type}</p>
-    <p>Content- {oneDetail.content}</p>
+    <p>Title- {detail.title}</p>
+    <p>Type- {detail.type}</p>
+    <p>Content- {detail.content}</p>
   </div>
   )
 }
